@@ -4,18 +4,27 @@ import prisma from "../prisma.js";
 import "dotenv/config";
 
 export const registerUser = async (req, res) => {
-    const { name, email, password, skills } = req.body;
+    const { name, email, password, skills, experience, location } = req.body;
 
     try {
         const existingUser = await prisma.user.findUnique({ where: { email } });
         if (existingUser) return res.status(400).json({ msg: "User already exists" });
 
         const hashedPassword = await bcrypt.hash(password, 10);
+
         const user = await prisma.user.create({
-            data: { name, email, password: hashedPassword, skills }
+            data: {
+                name,
+                email,
+                password: hashedPassword,
+                skills: skills || "",
+                experience: experience || "",
+                location: location || "",
+            }
         });
 
         res.status(201).json({ msg: "User created successfully", userId: user.id });
+
     } catch (err) {
         res.status(500).json({ msg: "Server error", error: err.message });
     }
