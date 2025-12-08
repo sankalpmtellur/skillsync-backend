@@ -29,8 +29,6 @@ model Project {
   duration    String
   difficulty  String
   progress    Int?
-  likes       Int     @default(0)
-  comments    Int     @default(0)
   views       Int     @default(0)
   tags        Json?
   featured    Boolean @default(false)
